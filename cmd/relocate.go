@@ -26,7 +26,8 @@ func relocateChart(chartPath string) error {
 	defer srcGz.Close()
 	srcTar := tar.NewReader(srcGz)
 
-	dstChart, err := os.Create(fmt.Sprintf("%s.tgz", chartPath))
+	destinationPath := fmt.Sprintf("%s.tgz", chartPath)
+	dstChart, err := os.Create(destinationPath)
 	if err != nil {
 		return err
 	}
@@ -46,6 +47,7 @@ func relocateChart(chartPath string) error {
 			return err
 		}
 	}
+	fmt.Printf("Written the modified chart to %s\n", destinationPath)
 	return nil
 }
 

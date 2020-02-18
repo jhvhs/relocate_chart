@@ -43,15 +43,19 @@ This above command will set the image paths in the chart.tgz to new.registry.loc
 		if len(args) < 1 {
 			return errors.New("a path to the chart tarball is required")
 		}
-		fileInfo, err := os.Stat(args[0])
-		if err != nil {
-			return fmt.Errorf("%s doesn't seem to exist", args[0])
-		}
-		if fileInfo.IsDir() {
-			return fmt.Errorf("%s is a directory. Expecting a helm chart tarball", args[0])
-		}
-		return nil
+		return ensurePathToAFile(args[0])
 	},
+}
+
+func ensurePathToAFile(path string) error {
+	fileInfo, err := os.Stat(path)
+	if err != nil {
+		return err
+	}
+	if fileInfo.IsDir() {
+		return fmt.Errorf("%s is a directory. Expecting a helm chart tarball", path)
+	}
+	return nil
 }
 
 func relocate(_ *cobra.Command, args []string) error {
